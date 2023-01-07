@@ -1,4 +1,5 @@
 import ast
+import argparse
 
 
 class Visitor(ast.NodeVisitor):
@@ -64,10 +65,10 @@ def compare(filename1: str, filename2: str) -> float:
         transformedText2 = ast.unparse(ast2)
 
         # Возвращается расстояние Левенштейна от двух текстов, поделенное на большее из двух чисел:
-        # 1) разность длин нормализованных текстов; 2) длина нормализованного текста №2
+        # 1) разность длин изначальных текстов; 2) длина изначального текста №2
         # Таким образом, коэффициент совпадения не превышает 1
         return editDistance(transformedText1, transformedText2) / \
-            max(abs(len(transformedText1) - len(transformedText2)), len(transformedText2))
+            max(abs(len(text1) - len(text2)), len(text2))
 
     except:
         # Возвращается коэффициент совпадения, но для ненормализованных текстов
@@ -90,9 +91,14 @@ def solve(inputFile: str, outputFile: str) -> None:
 
 
 def main():
-    # Запрос имён файлов ввода и вывода
-    inputFile = input()
-    outputFile = input()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('inputFile')
+    parser.add_argument('outputFile')
+
+    args = parser.parse_args()
+    inputFile, outputFile = args.inputFile, args.outputFile
+
     solve(inputFile, outputFile)
 
 
